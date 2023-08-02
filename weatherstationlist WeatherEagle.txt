@@ -1,3 +1,3 @@
 //See hardwarelist.txt for details on this file format.
 //Version|Manufacturer|Model|Comment|MapsTo|PlugInDllName
-2|Primaluce Lab|Eagle|Eagle series environmental sensor weather plugin| |libWeatherEagle||1|1|1|
+2|PrimaLuceLab|Eagle Manager X|Eagle series environmental sensor weather plugin| |libWeatherEagle||1|1|1|

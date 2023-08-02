@@ -2,8 +2,7 @@
 
 extern "C" PlugInExport int sbPlugInName2(BasicStringInterface& str)
 {
-	str = "X2Weather PlugIn for Eagle series";
-
+    str = "PrimaLuceLab Eagle series weather Plug In";
 	return 0;
 }
 

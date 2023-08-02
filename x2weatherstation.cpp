@@ -24,7 +24,7 @@ X2WeatherStation::X2WeatherStation(const char* pszDisplayName,
 	m_bLinked = false;
     if (m_pIniUtil) {
         char szIpAddress[128];
-        m_pIniUtil->readString(PARENT_KEY, CHILD_KEY_IP, "127.0.0.1", szIpAddress, 128);
+        m_pIniUtil->readString(PARENT_KEY, CHILD_KEY_IP, "localhost", szIpAddress, 128);
         m_WeatherEagle.setIpAddress(std::string(szIpAddress));
         m_WeatherEagle.setTcpPort(m_pIniUtil->readInt(PARENT_KEY, CHILD_KEY_PORT, 1380));
     }
@@ -135,7 +135,7 @@ void X2WeatherStation::uiEvent(X2GUIExchangeInterface* uiex, const char* pszEven
 
 void X2WeatherStation::driverInfoDetailedInfo(BasicStringInterface& str) const
 {
-    str = "Eagle Manager X";
+    str = "Eagle Manager X by Rodolphe Pineau";
 }
 
 double X2WeatherStation::driverInfoVersion(void) const
@@ -182,6 +182,7 @@ int	X2WeatherStation::establishLink(void)
     int nErr = SB_OK;
 
     X2MutexLocker ml(GetMutex());
+
     nErr = m_WeatherEagle.Connect();
     if(nErr)
         m_bLinked = false;
@@ -192,6 +193,7 @@ int	X2WeatherStation::establishLink(void)
 }
 int	X2WeatherStation::terminateLink(void)
 {
+
     m_WeatherEagle.Disconnect();
 
 	m_bLinked = false;
@@ -232,11 +234,19 @@ int X2WeatherStation::weatherStationData(double& dSkyTemp,
     X2MutexLocker ml(GetMutex());
 
     nSecondsSinceGoodData = 1; // was 900 , aka 15 minutes ?
+    nRoofCloseThisCycle = 0;
+    /*
+    nRainFlag = 0;
+    nWetFlag = nRainFlag;
+
+    windCondition = x2WindCond::windCalm;
+    rainCondition = x2RainCond::rainDry;
+    */
+
     dAmbTemp = m_WeatherEagle.getAmbianTemp();
 	nPercentHumdity = int(m_WeatherEagle.getHumidity());
 	dDewPointTemp = m_WeatherEagle.getDewPointTemp();
     dBarometricPressure = m_WeatherEagle.getBarometricPressure();
-
 	return nErr;
 }
 
