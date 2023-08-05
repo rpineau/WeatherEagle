@@ -177,7 +177,7 @@ int CWeatherEagle::eagleEccoConnect()
     if (nErr) {
         return nErr;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     while(nTimeout < MAX_CONNECT_TIMEOUT) {
         nErr = doGET("/getecco", response_string);
@@ -194,12 +194,12 @@ int CWeatherEagle::eagleEccoConnect()
                 }
                 else {
                     nTimeout++;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(250));
                 }
             }
             else {
                 nTimeout++;
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(250));
             }
         }
         catch (json::exception& e) {
@@ -211,8 +211,13 @@ int CWeatherEagle::eagleEccoConnect()
         }
 
     }
-    if(nTimeout>=MAX_CONNECT_TIMEOUT)
-        return COMMAND_FAILED;
+    if(nTimeout>=MAX_CONNECT_TIMEOUT) {
+#if defined PLUGIN_DEBUG && PLUGIN_DEBUG >= 2
+        m_sLogFile << "["<<getTimeStamp()<<"]"<< " [eagleEccoConnect] ECCO not responding. Not connected." << std::endl;
+        m_sLogFile.flush();
+#endif
+        return ERR_NORESPONSE;
+    }
     return nErr;
 }
 
@@ -355,6 +360,28 @@ double CWeatherEagle::getBarometricPressure()
     return m_dBarometricPressure;
 }
 
+double CWeatherEagle::getExteSensorTemp(int nIndex)
+{
+    // <rca_portidx>=5,6,7;
+    if(nIndex<5 || nIndex>7)
+        return -273.15;
+
+    switch (nIndex) {
+        case 5:
+            return m_dExtTemp5;
+            break;
+        case 6:
+            return m_dExtTemp6;
+            break;
+        case 7:
+            return m_dExtTemp7;
+            break;
+
+        default:
+            return -273.15;
+            break;
+    }
+}
 
 int CWeatherEagle::getData()
 {
@@ -413,6 +440,9 @@ int CWeatherEagle::getData()
                 m_dPercentHumdity = jResp.at("hum").get<double>();
                 m_dBarometricPressure = jResp.at("pressure").get<double>();
                 m_dDewPointTemp = jResp.at("dew").get<double>();
+                m_dExtTemp5 = jResp.at("temp5").get<double>();
+                m_dExtTemp6 = jResp.at("temp6").get<double>();
+                m_dExtTemp7 = jResp.at("temp7").get<double>();
             }
         }
         else {

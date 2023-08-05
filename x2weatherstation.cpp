@@ -100,6 +100,18 @@ int X2WeatherStation::execModalSettingsDialog()
         std::stringstream().swap(ssTmp);
         ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getBarometricPressure() << " mbar";
         dx->setPropertyString("pressure", "text", ssTmp.str().c_str());
+
+        std::stringstream().swap(ssTmp);
+        ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getExteSensorTemp(5) << " ºC";
+        dx->setPropertyString("port5_Temp", "text", ssTmp.str().c_str());
+
+        std::stringstream().swap(ssTmp);
+        ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getExteSensorTemp(6) << " ºC";
+        dx->setPropertyString("port6_Temp", "text", ssTmp.str().c_str());
+
+        std::stringstream().swap(ssTmp);
+        ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getExteSensorTemp(7) << " ºC";
+        dx->setPropertyString("port7_Temp", "text", ssTmp.str().c_str());
     }
 
     //Display the user interface
@@ -130,6 +142,18 @@ void X2WeatherStation::uiEvent(X2GUIExchangeInterface* uiex, const char* pszEven
         std::stringstream().swap(ssTmp);
         ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getBarometricPressure() << " mbar";
         uiex->setPropertyString("pressure", "text", ssTmp.str().c_str());
+
+        std::stringstream().swap(ssTmp);
+        ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getExteSensorTemp(5) << " ºC";
+        uiex->setPropertyString("port5_Temp", "text", ssTmp.str().c_str());
+
+        std::stringstream().swap(ssTmp);
+        ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getExteSensorTemp(6) << " ºC";
+        uiex->setPropertyString("port6_Temp", "text", ssTmp.str().c_str());
+
+        std::stringstream().swap(ssTmp);
+        ssTmp<< std::fixed << std::setprecision(2) << m_WeatherEagle.getExteSensorTemp(7) << " ºC";
+        uiex->setPropertyString("port7_Temp", "text", ssTmp.str().c_str());
     }
 }
 

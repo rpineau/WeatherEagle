@@ -57,7 +57,7 @@ using json = nlohmann::json;
 #define MAX_READ_WAIT_TIMEOUT 25
 #define NB_RX_WAIT 10
 
-#define MAX_CONNECT_TIMEOUT 10
+#define MAX_CONNECT_TIMEOUT 5
 
 // error codes
 enum WeatherEagleErrors {PLUGIN_OK=0, NOT_CONNECTED, CANT_CONNECT, BAD_CMD_RESPONSE, COMMAND_FAILED, COMMAND_TIMEOUT, PARSE_FAILED};
@@ -93,6 +93,7 @@ public:
     double getHumidity();
     double getDewPointTemp();
     double getBarometricPressure();
+    double getExteSensorTemp(int nIndex);
 
 #ifdef PLUGIN_DEBUG
     void  log(const std::string sLogLine);
@@ -121,6 +122,9 @@ protected:
     std::atomic<double> m_dPercentHumdity;
     std::atomic<double> m_dDewPointTemp;
     std::atomic<double> m_dBarometricPressure;
+    std::atomic<double> m_dExtTemp5;
+    std::atomic<double> m_dExtTemp6;
+    std::atomic<double> m_dExtTemp7;
 
     bool            m_bSafe;
 
